@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Network Security</title>
+</head>
+<body>
+    <h1>Welcome to Network Security</h1>
+    <p>Hello! We're glad you're here to learn about network security.</p>
+    
+    <h2>Login Form</h2>
+    <form action="success.html" method="POST" id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <input type="submit" value="Login">
+    </form>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('db.csv')
+                .then(response => response.text())
+                .then(csv => {
+                    const rows = csv.split('\n');
+                    const db = rows.map(row => row.split(','));
+                    const user = db.find(row => row[0] === username);
+                    if (user && user[1] === password) {
+                        window.location.href = 'success_login.html';
+                    } else {
+                        alert('Login Failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching the CSV file:', error);
+                });
+        });
+    </script>
+</body>
+</html>
